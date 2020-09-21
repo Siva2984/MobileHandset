@@ -29,9 +29,9 @@ public class HandsetRowMapper implements RowMapper<Handset> {
         Handset handset = new Handset();
 
         try {
-            handset.setPriceEur(rs.getLong("priceEur"));
+            handset.getRelease().setPriceEur(rs.getInt("priceEur"));
             handset.setSim(rs.getString("sim"));
-            handset.setAnnounceDate(rs.getString("announcedDate"));
+            handset.getRelease().setAnnounceDate(rs.getString("announcedDate"));
         } catch (Exception e) {
             logger.error("Error while converting the row into an account object via row mapper", e);
         }

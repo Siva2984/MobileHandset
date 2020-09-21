@@ -1,57 +1,39 @@
 package com.axiom.mobilehandset.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /** Represents an handset model class
  * @author Sivakumar Panchu
  * @version 1.0
  * @since 21/09/2020
 */
-
+@Data
+@AllArgsConstructor
+@Entity
 public class Handset {
-
-
-	private long priceEur;
+	@Id
+	private int id;
+	private String brand;
+	private String phone;
+	private String picture;
+	private String resolution;
     private String sim;
-	private String announceDate;
-    
+
+	@Embedded
+	private Release release;
+	@Embedded
+	private Hardware hardware;
+
     /** 
     * Creates an handset with the specified name
     */
 	public Handset() { }
-	
-	/** Creates an account with the specified name.
-	 * @param priceEur The handset price.
-	 * @param sim The handset supported  sim.
-	 * @param announceDate The handset announced date.
-	*/
-	public Handset(long priceEur, String sim, String announceDate) {
-		this.priceEur = priceEur;
-		this.sim = sim;
-		this.announceDate = announceDate;
-	}
-	public long getPriceEur() {
-		return priceEur;
-	}
-
-	public void setPriceEur(long priceEur) {
-		this.priceEur = priceEur;
-	}
-
-	public String getSim() {
-		return sim;
-	}
-
-	public void setSim(String sim) {
-		this.sim = sim;
-	}
-	public String getAnnounceDate() {
-		return announceDate;
-	}
-
-	public void setAnnounceDate(String announceDate) {
-		this.announceDate = announceDate;
-	}
 
 }
