@@ -19,7 +19,7 @@ import javax.persistence.Id;
 @Entity
 public class Handset {
 	@Id
-	private int id;
+	private Integer id;
 	private String brand;
 	private String phone;
 	private String picture;

@@ -20,7 +20,7 @@ import java.util.List;
  * @since 21/09/2020
  */
 @Service
-public class HandsetSearchService {
+public class HandsetSearchService implements IHandsetSearchService{
 	public static final Logger logger = LoggerFactory.getLogger(HandsetController.class);
 	private HandsetRepository handsetRepository;
 
@@ -31,18 +31,18 @@ public class HandsetSearchService {
 	}
 
 	public void saveAll(List<Handset> handsets) {
-		 Iterable<Handset> handsets1 = handsetRepository.saveAll(handsets);
+		 handsetRepository.saveAll(handsets);
 	}
 
-	public Iterable<Handset> findByPriceEur(int priceEur) {
-		return handsetRepository.findAll();
+	public List<Handset> findByPriceEur(Integer priceEur) {
+		return handsetRepository.findByPriceEur(priceEur);
 	}
 
-	public Iterable<Handset> findBySim(String sim) {
-		return handsetRepository.findAll();
+	public List<Handset> findBySim(String sim) {
+		return handsetRepository.findBySimIgnoreCase(sim);
 	}
 
-	public Iterable<Handset> findByAnnounceDateAndPriceEur(String announcedDate, int priceEur) {
-		return handsetRepository.findAll();
+	public List<Handset> findByAnnounceDateAndPriceEur(String announcedDate, Integer  priceEur) {
+		return handsetRepository.findByAnnounceDateAndPriceEur(announcedDate, priceEur);
 	}
 }

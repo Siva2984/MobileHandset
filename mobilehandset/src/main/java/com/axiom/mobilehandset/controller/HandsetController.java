@@ -2,6 +2,7 @@ package com.axiom.mobilehandset.controller;
 
 import com.axiom.mobilehandset.model.Handset;
 import com.axiom.mobilehandset.service.HandsetSearchService;
+import com.axiom.mobilehandset.utils.PredicateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +33,9 @@ public class HandsetController {
 
     @Autowired
     public HandsetController(HandsetSearchService handsetSearchService) {
-        System.out.println("handset search requested by user: ");
         this.handsetSearchService = handsetSearchService;
-       // loadData(handsetSearchService);
     }
+
     // read json and write to inmemory database
     @PostConstruct
     private  void loadData() {
@@ -45,9 +45,8 @@ public class HandsetController {
         InputStream inputStream = TypeReference.class.getResourceAsStream("/json/handset.json");
         try {
             List<Handset> handsets = mapper.readValue(inputStream, typeReference);
-            System.out.println("Total Handsets to Save" + handsets.size());
             handsetSearchService.saveAll(handsets);
-            System.out.println("Handsets Saved successfully!");
+            logger.info("Static Handsets data loaded successfully!");
         } catch (IOException e) {
             System.out.println("Unable to save users: " + e.getMessage());
         }
@@ -68,14 +67,22 @@ public class HandsetController {
             @RequestParam(name = "announceDate", required = false) String announceDate) {
 
         try {
-            System.out.println("handset search requested by user: ");
-            System.out.println("handset search requested by user: " + priceEur);
-            System.out.println("handset search requested by user: " + sim);
-            System.out.println("handset search requested by user: " + announceDate);
             logger.info("handset search requested by user: ", priceEur, sim, announceDate);
 
-            return handsetSearchService.findByPriceEur(Optional.ofNullable(priceEur).map(Integer::parseInt).orElse(0));
-
+            return Optional
+                    .ofNullable(priceEur)
+                    .map(Integer::parseInt)
+                    .map(price -> {
+                        System.out.print("annpunceDate ::: " +   PredicateUtil.isNullOrEmpty.test(announceDate));
+                        return PredicateUtil.isNullOrEmpty.test(announceDate)?
+                        handsetSearchService.findByPriceEur(price) : handsetSearchService.findByAnnounceDateAndPriceEur(announceDate, price);
+                    })
+                    .orElseGet(() -> Optional
+                            .ofNullable(sim)
+                            .map(simValue -> handsetSearchService.findBySim(sim))
+                            .orElse(null)
+                        )
+                    ;
         } catch (Exception e) {
             logger.error("Error while fetching statement", e);
             return null;
