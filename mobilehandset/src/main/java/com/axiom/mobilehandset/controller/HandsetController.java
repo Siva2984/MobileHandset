@@ -61,7 +61,7 @@ public class HandsetController {
      * @return handset
      */
     @GetMapping("/mobile/search")
-    public Iterable<Handset> getHandset(
+    public List<Handset> getHandset(
             @RequestParam(name = "priceEur", required = false) String priceEur,
             @RequestParam(name = "sim", required = false) String sim,
             @RequestParam(name = "announceDate", required = false) String announceDate) {
@@ -72,8 +72,8 @@ public class HandsetController {
             return Optional
                     .ofNullable(priceEur)
                     .map(Integer::parseInt)
+                    .filter(price -> PredicateUtil.isGreaterThanZero.test(price))
                     .map(price -> {
-                        System.out.print("annpunceDate ::: " +   PredicateUtil.isNullOrEmpty.test(announceDate));
                         return PredicateUtil.isNullOrEmpty.test(announceDate)?
                         handsetSearchService.findByPriceEur(price) : handsetSearchService.findByAnnounceDateAndPriceEur(announceDate, price);
                     })
