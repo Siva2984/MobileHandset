@@ -1,10 +1,12 @@
 package com.axiom.mobilehandset.service;
 
 
+import com.axiom.mobilehandset.constants.HandsetSearchConstants;
 import com.axiom.mobilehandset.model.Handset;
 import com.axiom.mobilehandset.model.Hardware;
 import com.axiom.mobilehandset.model.Release;
 import com.axiom.mobilehandset.repository.HandsetRepository;
+import com.axiom.mobilehandset.repository.HandsetSpecificationsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +17,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -27,17 +32,18 @@ class HandsetSearchServiceTest {
     @Autowired
     private HandsetRepository repository;
     private Handset test;
+    private Map<String, String> requestParam;
     @BeforeEach
     void setUp() {
         Release release = new Release();
         Hardware hardware = new Hardware();
-        hardware.setGps("gps");
+        hardware.setGps("A-GPS");
         hardware.setBattery("Battery");
         hardware.setAudioJack("audiojack");
         release.setPriceEur(200);
         release.setAnnounceDate(" 1999");
         test = new Handset();
-        //test.setId(2345);
+        test.setId(2345);
         test.setBrand("Samsung S9");
         test.setHardware(hardware);
         test.setResolution("15");
@@ -47,10 +53,68 @@ class HandsetSearchServiceTest {
         List<Handset> handsets = new ArrayList<>();
         handsets.add(test);
         repository.saveAll(handsets);
+        requestParam = new HashMap<String, String>();
+        requestParam.put("gps","A-GPS");
+
         handsetSearchService = new HandsetSearchService(repository);
 
     }
 
+
+
+    @Test
+    void shouldGetHandsetByHardware() {
+        List<Handset> handsets = new ArrayList<>();
+        handsets.add(test);
+        HandsetSpecificationsBuilder handsetSpecification = new HandsetSpecificationsBuilder();
+
+        if (requestParam.containsKey(HandsetSearchConstants.HANDSET_GPS)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_HARDWARE, HandsetSearchConstants.HANDSET_GPS, requestParam.get(HandsetSearchConstants.HANDSET_GPS));
+        }
+        List<Handset> response = handsetSearchService.findAll(handsetSpecification.build());
+
+        assertEquals("A-GPS", response.get(0).getHardware().getGps());
+        assertNotEquals("gps", response.get(0).getHardware().getGps());
+    }
+
+    @Test
+    void shouldGetHandsetByRelease() {
+        List<Handset> handsets = new ArrayList<>();
+        handsets.add(test);
+        requestParam = new HashMap<String, String>();
+        requestParam.put("announceDate","1999");
+        requestParam.put("priceEur","200");
+        HandsetSpecificationsBuilder handsetSpecification = new HandsetSpecificationsBuilder();
+
+        if (requestParam.containsKey(HandsetSearchConstants.HANDSET_DATE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_RELEASE, HandsetSearchConstants.HANDSET_DATE, requestParam.get(HandsetSearchConstants.HANDSET_DATE));
+        }
+        if (requestParam.containsKey(HandsetSearchConstants.HANDSET_PRICE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_RELEASE, HandsetSearchConstants.HANDSET_PRICE, requestParam.get(HandsetSearchConstants.HANDSET_PRICE));
+        }
+        List<Handset> response = handsetSearchService.findAll(handsetSpecification.build());
+
+        assertEquals(" 1999", response.get(0).getRelease().getAnnounceDate());
+        assertEquals(200, response.get(0).getRelease().getPriceEur());
+        assertNotEquals(" Nano", response.get(0).getRelease().getAnnounceDate());
+    }
+    @Test
+    void shouldGetHandsetBySim() {
+        List<Handset> handsets = new ArrayList<>();
+        handsets.add(test);
+        requestParam = new HashMap<String, String>();
+        requestParam.put("sim","eSIM");
+        requestParam.put("priceEur","200");
+        HandsetSpecificationsBuilder handsetSpecification = new HandsetSpecificationsBuilder();
+
+        if (requestParam.containsKey(HandsetSearchConstants.HANDSET_SIM)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_SIM, "", requestParam.get(HandsetSearchConstants.HANDSET_SIM));
+        }
+        List<Handset> response = handsetSearchService.findAll(handsetSpecification.build());
+
+        assertEquals(" eSIM", response.get(0).getSim());
+        assertNotEquals(" Nano", response.get(0).getSim());
+    }
 
 
 
