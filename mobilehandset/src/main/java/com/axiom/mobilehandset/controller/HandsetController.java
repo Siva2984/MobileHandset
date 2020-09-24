@@ -1,5 +1,6 @@
 package com.axiom.mobilehandset.controller;
 
+import com.axiom.mobilehandset.constants.HandsetSearchConstants;
 import com.axiom.mobilehandset.model.Handset;
 import com.axiom.mobilehandset.model.SearchCriteria;
 import com.axiom.mobilehandset.repository.HandsetSpecification;
@@ -47,7 +48,7 @@ public class HandsetController {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<Handset>> typeReference = new TypeReference<List<Handset>>() {
         };
-        InputStream inputStream = TypeReference.class.getResourceAsStream("/json/handset.json");
+        InputStream inputStream = TypeReference.class.getResourceAsStream(HandsetSearchConstants.HANDSET_PATH);
         try {
             List<Handset> handsets = mapper.readValue(inputStream, typeReference);
             handsetSearchService.saveAll(handsets);
@@ -89,35 +90,35 @@ public class HandsetController {
     private Specification buildHandsetSpecFromRequestParam(Map<String, String> handsetSearchCriteria) {
         HandsetSpecificationsBuilder handsetSpecification = new HandsetSpecificationsBuilder();
 
-        if (handsetSearchCriteria.containsKey("sim")) {
-            handsetSpecification.with("sim", "", handsetSearchCriteria.get("sim"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_SIM)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_SIM, "", handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_SIM));
         }
-        if (handsetSearchCriteria.containsKey("phone")) {
-            handsetSpecification.with("phone", "", handsetSearchCriteria.get("phone"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_PHONE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_PHONE, "", handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_PHONE));
         }
-        if (handsetSearchCriteria.containsKey("brand")) {
-            handsetSpecification.with("brand", "", handsetSearchCriteria.get("brand"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_BRAND)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_BRAND, "", handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_BRAND));
         }
-        if (handsetSearchCriteria.containsKey("picture")) {
-            handsetSpecification.with("picture", "", handsetSearchCriteria.get("picture"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_PICTURE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_PICTURE, "", handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_PICTURE));
         }
-        if (handsetSearchCriteria.containsKey("resolution")) {
-            handsetSpecification.with("resolution", "", handsetSearchCriteria.get("resolution"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_RESOLUTION)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_RESOLUTION, "", handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_RESOLUTION));
         }
-        if (handsetSearchCriteria.containsKey("announceDate")) {
-            handsetSpecification.with("release", "announceDate", handsetSearchCriteria.get("announceDate"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_DATE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_RELEASE, HandsetSearchConstants.HANDSET_DATE, handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_DATE));
         }
-        if (handsetSearchCriteria.containsKey("priceEur")) {
-            handsetSpecification.with("release", "priceEur", handsetSearchCriteria.get("priceEur"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_PRICE)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_RELEASE, HandsetSearchConstants.HANDSET_PRICE, handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_PRICE));
         }
-        if (handsetSearchCriteria.containsKey("audioJack")) {
-            handsetSpecification.with("hardware", "audioJack", handsetSearchCriteria.get("audioJack"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_AUDIO)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_HARDWARE, HandsetSearchConstants.HANDSET_AUDIO, handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_AUDIO));
         }
-        if (handsetSearchCriteria.containsKey("gps")) {
-            handsetSpecification.with("hardware", "gps", handsetSearchCriteria.get("gps"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_GPS)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_HARDWARE, HandsetSearchConstants.HANDSET_GPS, handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_GPS));
         }
-        if (handsetSearchCriteria.containsKey("battery")) {
-            handsetSpecification.with("hardware", "battery", handsetSearchCriteria.get("battery"));
+        if (handsetSearchCriteria.containsKey(HandsetSearchConstants.HANDSET_BATTERY)) {
+            handsetSpecification.with(HandsetSearchConstants.HANDSET_HARDWARE, HandsetSearchConstants.HANDSET_BATTERY, handsetSearchCriteria.get(HandsetSearchConstants.HANDSET_BATTERY));
         }
         return handsetSpecification.build();
 
