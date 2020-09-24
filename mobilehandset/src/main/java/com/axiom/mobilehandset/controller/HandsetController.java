@@ -54,12 +54,12 @@ public class HandsetController {
             handsetSearchService.saveAll(handsets);
             logger.info("Static Handsets data loaded successfully!");
         } catch (IOException e) {
-            System.out.println("Unable to save users: " + e.getMessage());
+            logger.error("Static Handsets data loaded successfully!");
         }
     }
 
     /**
-     * This method is used to get statement report.
+     * This method is used to get Handsets.
      *
      * @param handsetSearchCriteria     search criteria from user
      * @return handset list
@@ -77,7 +77,7 @@ public class HandsetController {
                     .orElseGet(ArrayList::new)
                     ;
         } catch (Exception e) {
-            logger.error("Error while fetching statement", e);
+            logger.error("Error while fetching Handsets", e);
             return null;
         }
     }
