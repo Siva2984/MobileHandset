@@ -1,6 +1,8 @@
 package com.axiom.mobilehandset.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.axiom.mobilehandset.model.SearchCriteria;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ class HandsetRepositoryTest {
         release.setPriceEur(200);
         release.setAnnounceDate(" 1999");
         test = new Handset();
-        test.setId(2345);
+       // test.setId(2345);
         test.setSim(" eSIM");
         test.setRelease(release);
         List<Handset> handsets = new ArrayList<>();
@@ -39,16 +41,11 @@ class HandsetRepositoryTest {
     }
 
     @Test
-    public void givenSearch_thenExpectedReturned() {
-        List<Handset> response = repository.findByPriceEur(200);
-        assertEquals(200, response.get(0).getRelease().getPriceEur());
-        assertNotEquals(2000, response.get(0).getRelease().getPriceEur());
+    public void givenLast_whenGettingListOfUsers_thenCorrect() {
+        HandsetSpecification spec =
+                new HandsetSpecification(new SearchCriteria("sim", "", "eSIM"));
+        List<Handset> response = repository.findAll(spec);
 
-
-    }
-    @Test
-    public void givenSearch_NotAvailable_thenExpectedReturned() {
-        List<Handset> response = repository.findByPriceEur(2000);
-        assertEquals(0, response.size());
+        assertEquals(1, response.size());
     }
 }

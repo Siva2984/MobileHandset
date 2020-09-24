@@ -1,9 +1,6 @@
 package com.axiom.mobilehandset.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,6 +13,7 @@ import javax.persistence.Id;
 */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Handset {
 	@Id
@@ -25,15 +23,11 @@ public class Handset {
 	private String picture;
 	private String resolution;
     private String sim;
-
-	@Embedded
+    @Embedded
 	private Release release;
-	@Embedded
+    @Embedded
 	private Hardware hardware;
 
-    /** 
-    * Creates an handset with the specified name
-    */
-	public Handset() { }
+
 
 }

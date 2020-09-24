@@ -37,7 +37,7 @@ class HandsetSearchServiceTest {
         release.setPriceEur(200);
         release.setAnnounceDate(" 1999");
         test = new Handset();
-        test.setId(2345);
+        //test.setId(2345);
         test.setBrand("Samsung S9");
         test.setHardware(hardware);
         test.setResolution("15");
@@ -51,37 +51,7 @@ class HandsetSearchServiceTest {
 
     }
 
-    @Test
-    void shouldGetHandsetByPrice() {
-        List<Handset> handsets = new ArrayList<>();
-        handsets.add(test);
 
-        List<Handset> response = handsetSearchService.findByPriceEur(200);
-
-        assertEquals(200, response.get(0).getRelease().getPriceEur());
-        assertNotEquals(2000, response.get(0).getRelease().getPriceEur());
-    }
-
-    @Test
-    void shouldGetHandsetByPriceAndAnnounceDate() {
-        List<Handset> handsets = new ArrayList<>();
-        handsets.add(test);
-
-        List<Handset> response = handsetSearchService.findByAnnounceDateAndPriceEur("1999", 200);
-
-        assertEquals(" 1999", response.get(0).getRelease().getAnnounceDate());
-        assertNotEquals(" Nano", response.get(0).getRelease().getAnnounceDate());
-    }
-    @Test
-    void shouldGetHandsetBySim() {
-        List<Handset> handsets = new ArrayList<>();
-        handsets.add(test);
-
-        List<Handset> response = handsetSearchService.findBySim("eSIM");
-
-        assertEquals(" eSIM", response.get(0).getSim());
-        assertNotEquals(" Nano", response.get(0).getSim());
-    }
 
 
 }
